@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Button, Divider, Dropdown, Flex, Space, Typography } from "antd";
 import style from "./index.module.scss";
 import { observer } from "mobx-react-lite";
@@ -13,6 +14,10 @@ import { Compare } from "@/components/Compare";
 import { useResponse } from "@/media";
 import { RightOption } from "./RightOption";
 import { LeftContent } from "./LeftContent";
+import FAQ from "@/components/Faq";
+
+const PAGE_TITLE = 'Pic Smaller - Free Online Image Compressor: Batch Convert & Optimize JPEG/PNG/WebP/SVG/GIF';
+const PAGE_DESCRIPTION = 'Effortlessly optimize your images online. Maintain quality while reducing file size. No watermarks, no data collection. Perfect for websites and apps.';
 
 function getCurentLangStr(): string | undefined {
   const findLang = langList.find((item) => item?.key == gstate.lang);
@@ -86,10 +91,27 @@ const Body = observer(() => {
 const Home = observer(() => {
   useWorkerHandler();
 
+  useEffect(() => {
+    // Set the page title
+    document.title = gstate.locale?.pageTitle || PAGE_TITLE;
+
+    // Set the meta description
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', gstate.locale?.pageDescription || PAGE_DESCRIPTION);
+    } else {
+      const newMetaDescription = document.createElement('meta');
+      newMetaDescription.name = 'description';
+      newMetaDescription.content = gstate.locale?.pageDescription || PAGE_DESCRIPTION;
+      document.head.appendChild(newMetaDescription);
+    }
+  }, [gstate.lang]); // Re-run effect when language changes
+
   return (
     <div className={style.container}>
       <Header />
       <Body />
+      <FAQ />
       {homeState.compareId !== null && <Compare />}
     </div>
   );
