@@ -14,11 +14,11 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    port: 3010,
     host: "0.0.0.0"
   },
   preview: {
-    port: 3001,
+    port: 3011,
     host: "0.0.0.0",
   },
   test: {
